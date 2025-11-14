@@ -210,6 +210,9 @@ install_turn(){
   fi
   cp -a /etc/turnserver.conf /etc/turnserver.conf.bak.$(date +%s) 2>/dev/null || true
   local TURN_SECRET="$(awk '/turn_shared_secret:/ {print $2}' "$SECRETS_FILE" 2>/dev/null || secret_hex)"
+  local PUBLIC_IP
+  PUBLIC_IP="$(curl -fsS https://ifconfig.co)"
+  PUBLIC_IP="${PUBLIC_IP//$'\n'/}"
   cat >/etc/turnserver.conf <<CONF
 use-auth-secret
 static-auth-secret=${TURN_SECRET}
@@ -226,7 +229,7 @@ denied-peer-ip=0.0.0.0-0.255.255.255
 denied-peer-ip=240.0.0.0-255.255.255.255
 listening-port=3478
 tls-listening-port=5349
-# external-ip=PUBLIC_IP
+external-ip=${PUBLIC_IP}
 CONF
   systemctl enable --now coturn
 }
