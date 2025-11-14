@@ -272,8 +272,8 @@ create_admin_user(){
   # ВАЖНО: использовать -k и -H
   register_new_matrix_user \
     -k "$REG_SECRET" \
-    -u admin \
-    -p 'Kavabanga321' \
+    -u "${ADMIN_USER}" \
+    -p "${ADMIN_PASS}" \
     -a \
     http://127.0.0.1:8008
 }
