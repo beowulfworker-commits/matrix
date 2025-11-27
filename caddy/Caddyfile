@@ -1,0 +1,16 @@
+# caddy/Caddyfile
+{
+    email {env.MATRIX_ADMIN_EMAIL}
+}
+
+{env.MATRIX_SERVER_NAME} {
+    encode gzip
+
+    @matrix path /_matrix/* /_synapse/client/*
+    reverse_proxy @matrix synapse:8008
+}
+
+{env.MATRIX_SERVER_NAME}:8448 {
+    encode gzip
+    reverse_proxy synapse:8008
+}
